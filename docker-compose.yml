@@ -1,0 +1,77 @@
+version: "3"
+services:
+  selenium-hub4:
+    image: selenium/hub:4.0.0-20211102
+    container_name: selenium-hub4
+    restart: unless-stopped
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+    environment:
+      - JAVA_OPTS=-Dselenium.LOGGER.level=WARNING
+      - SE_NODE_SESSION_TIMEOUT=200
+  chrome-node4:
+    image: selenium/node-chrome:4.0.0-20211102
+    container_name: selenium-chrome-node4
+    restart: unless-stopped
+    shm_size: 2gb
+    tmpfs:
+      - /tmp
+    depends_on:
+      - selenium-hub4
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub4
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - JAVA_OPTS=-Dselenium.LOGGER.level=WARNING
+      - START_XVFB=false
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_SESSION_RETRY_INTERVAL=1
+      - SE_NODE_SESSION_TIMEOUT=200
+    ports:
+      - "6900:5900"
+    logging:
+      options:
+        max-size: 50m
+    privileged: true
+
+  selenium-hub:
+    image: selenium/hub:3.141.59-20210929
+    container_name: selenium-hub
+    restart: unless-stopped
+    ports:
+      - "5444:4444"
+    privileged: true
+    environment:
+      GRID_BROWSER_TIMEOUT: 320
+      GRID_TIMEOUT: 320
+      NODE_BROWSER_TIMEOUT: 320
+      NODE_TIMEOUT: 320
+      JAVA_OPTS: -Dselenium.LOGGER.level=WARNING
+    logging:
+      options:
+        max-size: 50m
+  chrome-node:
+    image: selenium/node-chrome:3.141.59-20210929
+    container_name: selenium-chrome-node
+    restart: unless-stopped
+    shm_size: 2gb
+    tmpfs:
+      - /tmp
+    environment:
+      REMOTE_HOST: http://chrome-node:5555
+      HUB_HOST: selenium-hub
+      NODE_MAX_INSTANCES: 10
+      NODE_MAX_SESSION: 100
+      GRID_BROWSER_TIMEOUT: 320
+      GRID_TIMEOUT: 320
+      NODE_BROWSER_TIMEOUT: 320
+      NODE_TIMEOUT: 320
+      START_XVFB: "false"
+      DBUS_SESSION_BUS_ADDRESS: "/dev/null"
+      JAVA_OPTS: -Dselenium.LOGGER.level=WARNING
+    privileged: true
+    logging:
+      options:
+        max-size: 50m
