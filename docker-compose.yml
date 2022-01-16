@@ -1,7 +1,7 @@
 version: "3"
 services:
   selenium-hub4:
-    image: selenium/hub:4.1.0-20211209
+    image: selenium/hub:4.1.1-20211217
     container_name: selenium-hub4
     restart: unless-stopped
     ports:
@@ -11,8 +11,9 @@ services:
     environment:
       - JAVA_OPTS=-Dselenium.LOGGER.level=WARNING
       - SE_NODE_SESSION_TIMEOUT=200
+      - SE_SESSION_RETRY_INTERVAL=1
   chrome-node4:
-    image: selenium/node-chrome:4.1.0-20211209
+    image: selenium/node-chrome:4.1.1-20211217
     container_name: selenium-chrome-node4
     restart: unless-stopped
     shm_size: 2gb
