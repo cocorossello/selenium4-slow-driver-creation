@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 
 public class DriverCreationTest {
     private static final Logger LOGGER = LogManager.getLogger(DriverCreationTest.class);
-    private final static int TASKS = 30;
+    private final static int TASKS = 60;
 
     @Test
     public void selenium4() throws ExecutionException, InterruptedException {
@@ -47,8 +47,8 @@ public class DriverCreationTest {
             ChromeOptions options = new ChromeOptions();
             options.setHeadless(true);
             var driver = new RemoteWebDriver(new URL(host), options);
-            for (var i = 0; i < 10; i++) {
-                driver.get("https://ifconfig.co");
+            for (var i = 0; i < 15; i++) {
+                driver.get("https://www.google.com");
             }
             LOGGER.info("Driver opened in {} ms", new Date().getTime() - now.getTime());
             driver.quit();

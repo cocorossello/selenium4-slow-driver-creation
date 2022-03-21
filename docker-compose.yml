@@ -1,12 +1,12 @@
 version: "3"
 services:
   chrome-node4:
-    image: selenium/standalone-chrome:4.1.2-20220217
+    image: selenium/standalone-chrome:4.1.2-20220317
     container_name: selenium-chrome-node4
     restart: unless-stopped
     ports:
       - "4444:4444"
-    shm_size: 2gb
+    shm_size: 8gb
     environment:
       - JAVA_OPTS=-Xmx10g  -XX:-ClassUnloading -XX:-ClassUnloadingWithConcurrentMark  -Dselenium.LOGGER.level=WARNING
       - SCREEN_WIDTH=1366
@@ -17,7 +17,8 @@ services:
       - SE_NODE_MAX_SESSIONS=96
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
       - SE_NODE_SESSION_TIMEOUT=200
-
+    tmpfs:
+      - /tmp
   chrome-node:
     image: selenium/standalone-chrome:3.141.59-20210929
     container_name: selenium-chrome-node3
