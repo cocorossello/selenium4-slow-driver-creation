@@ -1,7 +1,7 @@
 version: "3"
 services:
   chrome-node4:
-    image: selenium/standalone-chrome:4.1.2-20220317
+    image: selenium/standalone-chrome:4.1.3-20220327
     container_name: selenium-chrome-node4
     restart: unless-stopped
     ports:
