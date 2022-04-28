@@ -19,12 +19,16 @@ public class DriverCreationTest {
 
     @Test
     public void selenium4() throws ExecutionException, InterruptedException {
-        parallel_test("http://localhost:4444/");
+        var host = "http://localhost:4444/";
+        openDriver(host);//Warmup
+        parallel_test(host);
     }
 
     @Test
     public void selenium3() throws ExecutionException, InterruptedException {
-        parallel_test("http://localhost:6444/wd/hub");
+        var host = "http://localhost:6444/wd/hub";
+        openDriver(host); //Warmup
+        parallel_test(host);
     }
 
 
@@ -46,7 +50,10 @@ public class DriverCreationTest {
             Date now = new Date();
             ChromeOptions options = new ChromeOptions();
             options.setHeadless(true);
-            var driver = new RemoteWebDriver(new URL(host), options);
+            RemoteWebDriver driver;
+            synchronized (DriverCreationTest.class) { //Selenium4 needs this otherwise the test fails
+                driver = new RemoteWebDriver(new URL(host), options);
+            }
             for (var i = 0; i < 15; i++) {
                 driver.get("https://www.google.com");
             }
